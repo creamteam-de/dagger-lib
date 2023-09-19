@@ -1,5 +1,5 @@
 {
-  "name": "@dloez/dagger-lib",
+  "name": "dagger-lib",
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@dagger.io/dagger": "^0.8.5",
+    "commander": "^11.0.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
