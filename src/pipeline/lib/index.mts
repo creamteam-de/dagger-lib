@@ -1,33 +1,40 @@
 import { Client } from "@dagger.io/dagger"
-import { program, Command, Option } from "commander"
+import { program, Option } from "commander"
+
+export interface PipelineArgs {
+  client: Client,
+  data?: Object
+}
 
 const STEP_ALL = "all"
 
 export class Pipeline {
-  events: Map<string, (...args: any[]) => Promise<any>>
+  events: Map<string, (args: PipelineArgs) => Promise<PipelineArgs>>
+  private args: PipelineArgs
 
-  constructor() {
-    this.events = new Map<string, (...args: any[]) => Promise<any>>()
+  constructor(args: PipelineArgs) {
+    this.events = new Map<string, (args: PipelineArgs) => Promise<PipelineArgs>>()
+    this.args = args
   }
 
   on(
     eventName: string,
-    eventCallback: (...args: any[]) => Promise<any>,
+    eventCallback: (args: PipelineArgs) => Promise<PipelineArgs>,
   ): Pipeline {
     this.events.set(eventName, eventCallback)
     return this
   }
 
-  async callAll(...args: any[]) {
+  async callAll() {
     for (const [_, eventCallback] of this.events) {
-      await eventCallback(...args)
+      this.args = await eventCallback(this.args)
     }
   }
 
-  async call(eventName: string, ...args: any[]) {
+  async call(eventName: string) {
     const eventCallback = this.events.get(eventName)
     if (eventCallback != undefined) {
-      await eventCallback(...args)
+      this.args = await eventCallback(this.args)
     }
   }
 
@@ -35,7 +42,7 @@ export class Pipeline {
     const choices = Array.from(this.events.keys())
     choices.push(STEP_ALL)
 
-    const option = program.addOption(
+    program.addOption(
       new Option(
         "--step <string>",
         "step of the pipeline to be executed, defaults to 'all'",
@@ -51,9 +58,8 @@ export class Pipeline {
       return
     }
 
-    const step = this.events.get(options.step)
-    if (step != undefined) {
-      await step()
+    if (this.events.has(options.step)) {
+      await this.call(options.step)
     }
   }
 }
