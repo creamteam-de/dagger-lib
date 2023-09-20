@@ -3,11 +3,11 @@ import { Client, Container } from "@dagger.io/dagger"
 const SDKMAN_CACHE = "sdkman-cache"
 const SDKMAN_PATH = "/root/.sdkman"
 
-export async function installSdkman(
+export function installSdkman(
   client: Client,
   container: Container,
   with_cache: Boolean = false,
-): Promise<Container> {
+): Container {
   if (with_cache) {
     const sdkman_cache = client.cacheVolume(SDKMAN_CACHE)
     container.withMountedCache(SDKMAN_PATH, sdkman_cache)
@@ -23,13 +23,13 @@ export async function installSdkman(
   return container
 }
 
-export async function installJava(
+export function installJava(
   client: Client,
   container: Container,
   version: string,
   with_cache: Boolean = false,
-): Promise<Container> {
-  container = await installSdkman(client, container, with_cache)
+): Container {
+  container = installSdkman(client, container, with_cache)
 
   container = container
     .withExec([
@@ -49,13 +49,13 @@ export async function installJava(
   return container
 }
 
-export async function installMaven(
+export function installMaven(
   client: Client,
   container: Container,
   version: string,
   with_cache: Boolean = false,
-): Promise<Container> {
-  container = await installSdkman(client, container, with_cache)
+): Container {
+  container = installSdkman(client, container, with_cache)
 
   container = container
     .withExec([
