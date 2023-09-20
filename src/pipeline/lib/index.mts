@@ -2,8 +2,8 @@ import { Client } from "@dagger.io/dagger"
 import { program, Option } from "commander"
 
 export interface PipelineArgs {
-  client: Client,
-  data?: Object
+  client: Client
+  data?: { [key: string]: any }
 }
 
 const STEP_ALL = "all"
@@ -13,7 +13,10 @@ export class Pipeline {
   private args: PipelineArgs
 
   constructor(args: PipelineArgs) {
-    this.events = new Map<string, (args: PipelineArgs) => Promise<PipelineArgs>>()
+    this.events = new Map<
+      string,
+      (args: PipelineArgs) => Promise<PipelineArgs>
+    >()
     this.args = args
   }
 

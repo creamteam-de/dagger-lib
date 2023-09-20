@@ -1,8 +1,16 @@
 {
   "name": "dagger-lib",
   "type": "module",
-  "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./java": "./dist/java/index.mjs",
+    "./java.js": "./dist/java/index.mjs",
+    "./utils": "./dist/utils/index.mjs",
+    "./utils.js": "./dist/utils/index.mjs",
+    "./pipeline": "./dist/pipeline/index.mjs",
+    "./pipeline.JS": "./dist/pipeline/index.mjs"
+  },
   "version": "1.0.0",
   "description": "",
   "scripts": {
