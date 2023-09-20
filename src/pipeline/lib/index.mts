@@ -9,7 +9,7 @@ export interface PipelineArgs {
 const STEP_ALL = "all"
 
 export class Pipeline {
-  events: Map<string, (args: PipelineArgs) => Promise<PipelineArgs>>
+  private events: Map<string, (args: PipelineArgs) => Promise<PipelineArgs>>
   private args: PipelineArgs
 
   constructor(args: PipelineArgs) {
@@ -18,6 +18,10 @@ export class Pipeline {
       (args: PipelineArgs) => Promise<PipelineArgs>
     >()
     this.args = args
+  }
+
+  getEventNames(): string[] {
+    return Array.from(this.events.keys())
   }
 
   on(
@@ -63,6 +67,56 @@ export class Pipeline {
 
     if (this.events.has(options.step)) {
       await this.call(options.step)
+    }
+  }
+}
+
+interface IPipelineGroup {
+  pipelines: Pipeline[]
+}
+
+export class PipelineGroup {
+  private pipelines: Pipeline[]
+
+  public constructor(obj?: IPipelineGroup) {
+    this.pipelines = obj?.pipelines ?? []
+  }
+
+  withPipeline(pipeline: Pipeline): PipelineGroup {
+    this.pipelines.push(pipeline)
+    return this
+  }
+
+  async exposeCli() {
+    const choices: string[] = [STEP_ALL]
+    this.pipelines.forEach((pipeline) => {
+      pipeline.getEventNames().forEach((name) => {
+        if (!choices.includes(name)) {
+          choices.push(name)
+        }
+      })
+    })
+
+    program.addOption(
+      new Option(
+        "--step <string>",
+        "step of the pipeline to be executed, defaults to 'all'",
+      )
+        .choices(choices)
+        .default(STEP_ALL),
+    )
+    program.parse()
+    const options = program.opts()
+
+    if (options.step == STEP_ALL) {
+      for (const pipeline of this.pipelines) {
+        await pipeline.callAll()
+      }
+      return
+    }
+
+    for (const pipeline of this.pipelines) {
+      await pipeline.call(options.step)
     }
   }
 }
