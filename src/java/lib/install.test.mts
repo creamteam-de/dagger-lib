@@ -11,7 +11,6 @@ describe("test sdk installation", () => {
         "ls /root/.sdkman/sdkman".split(" "),
       )
       await container.stdout()
-      expect(0).toBe(0)
     })
   })
 })
