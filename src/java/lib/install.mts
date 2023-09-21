@@ -17,8 +17,7 @@ export async function withSdkman(
     .withExec("apt-get update".split(" "))
     .withExec("apt-get install -y zip unzip wget curl".split(" "))
     .withEnvVariable("SDKMAN_DIR", `${SDKMAN_PATH}/sdkman`)
-    .withExec("curl -s https://get.sdkman.io -o sdkman.sh".split(" "))
-    .withExec("bash sdkman.sh".split(" "))
+    .withExec(["bash", "-c", "curl -s https://get.sdkman.io | bash"])
 
   return container
 }
