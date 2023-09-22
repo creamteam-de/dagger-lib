@@ -6,6 +6,8 @@
     ".": "./dist/index.mjs",
     "./java": "./dist/java/index.mjs",
     "./java.js": "./dist/java/index.mjs",
+    "./node": "./dist/node/index.mjs",
+    "./node.js": "./dist/node/index.mjs",
     "./utils": "./dist/utils/index.mjs",
     "./utils.js": "./dist/utils/index.mjs",
     "./pipeline": "./dist/pipeline/index.mjs",
@@ -21,7 +23,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dagger.io/dagger": "^0.8.5",
+    "@dagger.io/dagger": "^0.8.7",
     "commander": "^11.0.0",
     "ts-node": "^10.9.1"
   },
