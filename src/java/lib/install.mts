@@ -1,14 +1,14 @@
 import { Client, Container } from "@dagger.io/dagger"
 
 const SDKMAN_CACHE = "sdkman-cache"
-const SDKMAN_PATH = "/root/.sdkman"
+export const SDKMAN_PATH = "/root/.sdkman"
 
 export async function withSdkman(
   client: Client,
   container: Container,
-  with_cache: Boolean = false,
+  withCache: Boolean = false,
 ): Promise<Container> {
-  if (with_cache) {
+  if (withCache) {
     const sdkman_cache = client.cacheVolume(SDKMAN_CACHE)
     container.withMountedCache(SDKMAN_PATH, sdkman_cache)
   }
@@ -26,9 +26,9 @@ export async function withJava(
   client: Client,
   container: Container,
   version: string,
-  with_cache: Boolean = false,
+  withCache: Boolean = false,
 ): Promise<Container> {
-  container = await withSdkman(client, container, with_cache)
+  container = await withSdkman(client, container, withCache)
 
   container = container
     .withExec([
@@ -52,9 +52,9 @@ export async function withMaven(
   client: Client,
   container: Container,
   version: string,
-  with_cache: Boolean = false,
+  withCache: Boolean = false,
 ): Promise<Container> {
-  container = await withSdkman(client, container, with_cache)
+  container = await withSdkman(client, container, withCache)
 
   container = container
     .withExec([
