@@ -20,6 +20,7 @@
     "CLIENTID",
     "CLIENTSECRET",
     "passwordenv",
+    "printenv",
     "sdkman",
     "workdir"
   ]

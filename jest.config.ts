@@ -17,9 +17,7 @@ const jestConfig: JestConfigWithTsJest = {
   },
   resolver: "./e2e/mjsResolver.cjs",
   testMatch: ["**/?(*.)+(spec|test).mts"],
-  fakeTimers: {
-    enableGlobally: true,
-  },
+  testTimeout: 60000,
 }
 
 export default jestConfig

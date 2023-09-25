@@ -32,7 +32,7 @@ describe("Test sdk installation", () => {
         await container.stdout()
       })
     }),
-    test("The sdk command is availabe after soucing sdkman script", () => {
+    test("The sdk command is available after sourcing sdkman script", () => {
       return connect(async (client: Client) => {
         let container = client.container().from("ubuntu:20.04")
         container = (await withSdkman(client, container)).withExec([
