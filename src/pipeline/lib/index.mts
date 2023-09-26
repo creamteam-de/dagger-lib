@@ -40,9 +40,10 @@ export class Pipeline {
 
   async call(eventName: string) {
     const eventCallback = this.events.get(eventName)
-    if (eventCallback != undefined) {
-      this.args = await eventCallback(this.args)
+    if (eventCallback == undefined) {
+      throw new Error(`Event ${eventName} not found`)
     }
+    this.args = await eventCallback(this.args)
   }
 
   async exposeCli() {
