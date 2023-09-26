@@ -14,10 +14,10 @@ describe("Test env module", () => {
     process.env[VARIABLE_NAME] = VARIABLE_VALUE
     const variable = getEnvVariable(VARIABLE_NAME)
     expect(variable).toBe(VARIABLE_VALUE)
-  }),
-    test("getEnvVariable throws an error if the environment variable is not set", () => {
-      expect(() => getEnvVariable(VARIABLE_NAME)).toThrow(
-        `Missing environment variable ${VARIABLE_NAME}`,
-      )
-    })
+  })
+  test("getEnvVariable throws an error if the environment variable is not set", () => {
+    expect(() => getEnvVariable(VARIABLE_NAME)).toThrow(
+      `Missing environment variable ${VARIABLE_NAME}`,
+    )
+  })
 })
